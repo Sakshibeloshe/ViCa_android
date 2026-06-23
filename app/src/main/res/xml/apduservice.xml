@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    res/xml/apduservice.xml
+    =======================
+    Declares the ViCa AID group for HCE (Host Card Emulation).
+    This file is referenced by ViCaHCEService's <meta-data> tag in
+    AndroidManifest.xml.
+
+    The AID must match EXACTLY what iOS sends in the SELECT APDU:
+        F0 56 49 43 41 01 01 01
+        ^F0 = proprietary AID prefix (non-ISO card)
+             ^^^^^^^^^^^^ "VICA" in ASCII (56=V 49=I 43=C 41=A)
+                                   ^^^^^^^^ version 1.1.1
+
+    android:requireDeviceUnlock="false"
+        → card emulation works from the lock screen so users can
+          share without unlocking (mirrors iOS behaviour).
+
+    android:category="other"
+        → prevents conflict with payment category (which would
+          require EMV certification).
+-->
+<host-apdu-service
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/nfc_service_description"
+    android:requireDeviceUnlock="false">
+
+    <aid-group
+        android:category="other"
+        android:description="@string/nfc_aid_group_description">
+
+        <!--
+            Single AID filter matching exactly F056494341010101.
+            Android's NFC subsystem routes any SELECT AID for this
+            value to ViCaHCEService.processCommandApdu().
+        -->
+        <aid-filter android:name="F056494341010101" />
+
+    </aid-group>
+
+</host-apdu-service>

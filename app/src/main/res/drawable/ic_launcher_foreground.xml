@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ic_launcher_foreground.xml
+    ViCa launcher icon foreground — gold "V" lettermark on transparent background.
+    Used by the adaptive icon system (API 26+).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Gold "V" centered in the safe zone (within the inner 72dp) -->
+    <path
+        android:fillColor="#D4A843"
+        android:pathData="M28,22 L54,82 L80,22 L70,22 L54,62 L38,22 Z" />
+</vector>

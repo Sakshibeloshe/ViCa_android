@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    AndroidManifest.xml for ViCa Android App
+    =========================================
+    Covers all permissions and component declarations needed for:
+      - Phase 1: Room Database (no special permissions)
+      - Phase 2: NFC Host Card Emulation (ViCaHCEService)
+      - Phase 3: BLE Advertising + Scanning + Accelerometer (ViCaBLETapDetector)
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ===================================================================
+         PERMISSIONS
+         =================================================================== -->
+
+    <!-- Phase 2: NFC -->
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+    <uses-feature android:name="android.hardware.nfc.hce" android:required="false" />
+
+    <!-- Phase 3: Bluetooth (Android 12+ requires BLUETOOTH_ADVERTISE + BLUETOOTH_SCAN + BLUETOOTH_CONNECT)
+         For Android 11 and below, BLUETOOTH + BLUETOOTH_ADMIN are used instead. -->
+    <uses-permission android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+
+    <!-- Android 12+ (API 31+) runtime BLE permissions -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"
+        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Needed for BLE scanning on Android 11 and below -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="30" />
+
+    <!-- Phase 3: Accelerometer — no permission required; SensorManager is open -->
+
+    <!-- BLE feature declarations (non-required — NFC/BLE paths are fallbacks for each other) -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+
+    <!-- ===================================================================
+         APPLICATION
+         =================================================================== -->
+    <application
+        android:name=".ViCaApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ViCa">
+
+        <!-- Main entry-point activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Optional: deep-link into share screen from NFC tag read -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/vnd.vica.card" />
+            </intent-filter>
+        </activity>
+
+        <!-- ===============================================================
+             Phase 2: NFC Host Card Emulation service
+             ViCaHCEService answers SELECT AID from iOS CoreNFC reader.
+
+             IMPORTANT:
+               android:permission="android.permission.BIND_NFC_SERVICE"
+               prevents any app other than the NFC subsystem from binding
+               to this service.
+             =============================================================== -->
+        <service
+            android:name=".proximity.ViCaHCEService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NFC_SERVICE">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+            </intent-filter>
+            <!--
+                Points to res/xml/apduservice.xml which declares our AID group.
+                Must match the vicaAID bytes in ViCaSessionManager:
+                    F0 56 49 43 41 01 01 01
+            -->
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/apduservice" />
+        </service>
+
+    </application>
+
+</manifest>

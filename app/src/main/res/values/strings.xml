@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    res/values/strings.xml
+    Required string resources referenced from AndroidManifest and apduservice.xml
+-->
+<resources>
+    <string name="app_name">ViCa</string>
+
+    <!-- NFC HCE service descriptions shown in Android NFC settings -->
+    <string name="nfc_service_description">ViCa card sharing via NFC tap</string>
+    <string name="nfc_aid_group_description">ViCa digital business card</string>
+
+    <!-- Runtime permission rationale strings -->
+    <string name="permission_bluetooth_rationale">
+        ViCa uses Bluetooth to detect when you tap phones together to share your card.
+    </string>
+    <string name="permission_location_rationale">
+        Location access is required on this Android version to scan for nearby ViCa devices via Bluetooth.
+    </string>
+</resources>

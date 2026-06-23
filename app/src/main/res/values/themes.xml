@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Theme.ViCa — shell theme for the AndroidManifest android:theme attribute.
+    The actual visual theming is handled entirely by Jetpack Compose (ViCaTheme).
+    This theme only needs to set the window background colour so the splash
+    doesn't flash white before Compose renders.
+-->
+<resources>
+    <style name="Theme.ViCa" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Deep black background — matches VicaBlack (#0A0A0F) -->
+        <item name="android:windowBackground">@color/vica_black</item>
+        <item name="android:statusBarColor">@color/vica_black</item>
+        <item name="android:navigationBarColor">@color/vica_black</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

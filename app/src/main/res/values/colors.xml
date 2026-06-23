@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    colors.xml — raw colour values referenced by themes.xml.
+    Compose components use the Color.kt values directly; these are only
+    needed by the XML resource system (manifest theme, splash, etc.).
+-->
+<resources>
+    <color name="vica_black">#0A0A0F</color>
+    <color name="vica_gold">#D4A843</color>
+    <color name="white">#FFFFFF</color>
+</resources>
